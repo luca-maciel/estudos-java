@@ -27,6 +27,7 @@ class Group{
     }
 
     void showMembers(){
+        int pos=1;
         if (this.members.isEmpty()){
             JOptionPane.showMessageDialog(null, "This group is empty.");
             System.out.println("This group is empty.");
@@ -34,7 +35,8 @@ class Group{
         else{
             String membersString = "";
             for(People member : this.members){
-                membersString += "ID: " + member.id + " - Name: " + member.name + " - Age: " + member.age + "\n";
+                membersString += "ID: " + member.id + " Pos: " + pos + " - Name: " + member.name + " - Age: " + member.age + "\n";
+                pos += 1;
             }
             JOptionPane.showMessageDialog(null, membersString);
         }
@@ -59,7 +61,7 @@ class Main {
     static Group testGroup = new Group("Test group");
     public static void main(String[] args) {
         while (chose != "99"){
-            chose = JOptionPane.showInputDialog(menu);
+            chose = JOptionPane.showInputDialog(null, menu, "Menu", JOptionPane.QUESTION_MESSAGE);
 
             switch (Integer.parseInt(chose)){
                 case 1:
@@ -80,7 +82,7 @@ class Main {
                 case 3:
                     int option;
                     if (!testGroup.members.isEmpty()){
-                        option = Integer.parseInt(JOptionPane.showInputDialog("Enter the id of member that you want edit "));
+                        option = Integer.parseInt(JOptionPane.showInputDialog("Enter the position of the member that you want edit "));
                         People member = testGroup.members.get(option-1);
                         System.out.println(member.name);
                         option = Integer.parseInt(JOptionPane.showInputDialog("What information you wanna edit?\n[1] - Name\n[2] - Age"));
@@ -110,10 +112,9 @@ class Main {
                         JOptionPane.showMessageDialog(null, "This action is impossible to be executed because this group is empty.");
                     }
                     else{
-                        int optionDelete = Integer.parseInt(JOptionPane.showInputDialog("Enter the member if that you wanna delete"));
-                        People member = testGroup.members.get(optionDelete-1);
-                        testGroup.removeMember(member);
-                        JOptionPane.showMessageDialog(null, "Member deleted -> " + member.name);
+                        int optionDelete = Integer.parseInt(JOptionPane.showInputDialog("Enter the position of the member that you wanna delete"));
+                        JOptionPane.showMessageDialog(null, testGroup.members.get(optionDelete-1).name + " Deleted");
+                        testGroup.members.remove(optionDelete-1);
                     }
                     break;
 
