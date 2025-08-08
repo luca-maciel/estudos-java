@@ -53,7 +53,7 @@ class Group{
 }
 
 class Main {
-    static String menu = "What you wanna do?\n[1] - Show all members of the group\n[2] - Add new member to group\n[3] - Edit a member\n[99] - Exit";
+    static String menu = "What you wanna do?\n[1] - Show all members of the group\n[2] - Add new member to group\n[3] - Edit a member\n[4] - Delete a member\n[99] - Exit\n";
     static Scanner input = new Scanner(System.in);
     static String chose;
     static Group testGroup = new Group("Test group");
@@ -103,6 +103,17 @@ class Main {
                     }
                     else{
                         JOptionPane.showMessageDialog(null, "This action is impossible to be executed because this group is empty.");
+                    }
+                    break;
+                case 4:
+                    if (testGroup.members.isEmpty()){
+                        JOptionPane.showMessageDialog(null, "This action is impossible to be executed because this group is empty.");
+                    }
+                    else{
+                        int optionDelete = Integer.parseInt(JOptionPane.showInputDialog("Enter the member if that you wanna delete"));
+                        People member = testGroup.members.get(optionDelete-1);
+                        testGroup.removeMember(member);
+                        JOptionPane.showMessageDialog(null, "Member deleted -> " + member.name);
                     }
                     break;
 
