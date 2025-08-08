@@ -1,34 +1,46 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 class People{
     String name;
-    int age;
+    int age, id;
     public People(String name, int age){
         this.name = name;
         this.age = age;
     }
+
+    void alterName(String newName){
+        this.name = newName;
+    }
+    void alterAge(int newAge){
+        this.age = newAge;
+    }
 }
 
 class Group{
+    int idCount = 1;
     String group_name;
     ArrayList<People> members = new ArrayList<>();
-
     public Group(String group_name){
         this.group_name = group_name;
     }
 
     void showMembers(){
         if (this.members.isEmpty()){
+            JOptionPane.showMessageDialog(null, "This group is empty.");
             System.out.println("This group is empty.");
         }
         else{
+            String membersString = "";
             for(People member : this.members){
-                System.out.println(member.name);
+                membersString += "ID: " + member.id + " - Name: " + member.name + " - Age: " + member.age + "\n";
             }
+            JOptionPane.showMessageDialog(null, membersString);
         }
 
     }
+
 
     void addMember(People newMember){
         this.members.add(newMember);
@@ -40,34 +52,63 @@ class Group{
 
 }
 
-public class Main {
+class Main {
+    static String menu = "What you wanna do?\n[1] - Show all members of the group\n[2] - Add new member to group\n[3] - Edit a member\n[99] - Exit";
     static Scanner input = new Scanner(System.in);
-    public static void Menu(){
-        System.out.println("Hello! What you wanna do?\n[1] - See all group members\n[2] - Add member to group\n[3] - Remove member from group");
-    }
-
+    static String chose;
+    static Group testGroup = new Group("Test group");
     public static void main(String[] args) {
-        Group testGroup = new Group("Test group");
-        int chose = 99;
-        while (chose != 0){
-            Main.Menu();
-            chose = input.nextInt();
-//            if (chose == 1){
-//                testGroup.showMembers();
-//            }
-            switch (chose){
+        while (chose != "99"){
+            chose = JOptionPane.showInputDialog(menu);
+
+            switch (Integer.parseInt(chose)){
                 case 1:
                     testGroup.showMembers();
                     break;
+
                 case 2:
-                    input.nextLine();
-                    System.out.print("Enter the name of the new member: ");
-                    String name = input.nextLine();
-                    System.out.print("Enter the new member age: ");
-                    int age = input.nextInt();
-                    input.nextLine();
-                    People newMember = new People(name, age);
+                    String nameNewMember = JOptionPane.showInputDialog("Enter the name of the new member");
+//                Usa o Integer.parseInt() para transformar a String em int
+                    String newAge = JOptionPane.showInputDialog("Enter the age of the new member");
+                    People newMember = new People(nameNewMember, Integer.parseInt(newAge));
+                    newMember.id = testGroup.idCount;
                     testGroup.addMember(newMember);
+                    testGroup.idCount += 1;
+                    JOptionPane.showMessageDialog(null, nameNewMember + " was added to group");
+                    break;
+
+                case 3:
+                    int option;
+                    if (!testGroup.members.isEmpty()){
+                        option = Integer.parseInt(JOptionPane.showInputDialog("Enter the id of member that you want edit "));
+                        People member = testGroup.members.get(option-1);
+                        System.out.println(member.name);
+                        option = Integer.parseInt(JOptionPane.showInputDialog("What information you wanna edit?\n[1] - Name\n[2] - Age"));
+                        switch (option){
+                            case 1:
+                                String newName = JOptionPane.showInputDialog("Enter the new name for " + member.name);
+                                member.alterName(newName);
+                                JOptionPane.showMessageDialog(null, "Name edited.");
+                                System.out.println("Name edited");
+                                break;
+                            case 2:
+                                int age = Integer.parseInt(JOptionPane.showInputDialog("Enter the new age for " + member.name));
+                                member.alterAge(age);
+                                JOptionPane.showMessageDialog(null, "Age edited.");
+                                System.out.println("Age edited.");
+                                break;
+
+                        }
+
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "This action is impossible to be executed because this group is empty.");
+                    }
+                    break;
+
+                case 99:
+                    System.out.println("Finished");
+                    System.exit(0);
                     break;
             }
         }
